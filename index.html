@@ -1825,18 +1825,19 @@ footer {
         The easiest way to get Rukiri Pure Honey is to call or message us directly. We deliver across Ibanda District, Mbarara, Kampala, and we ship countrywide. Wholesale and bulk orders welcome.
       </p>
 
-      <div class="contact-form">
-        <input class="input" type="text" placeholder="Your name" />
-        <input class="input" type="text" placeholder="Phone number" />
-        <input class="input" type="text" placeholder="How much honey? (size &amp; quantity)" />
-        <textarea class="input" placeholder="Delivery location &amp; any other details"></textarea>
-        <button class="submit" type="button" onclick="this.innerText='Thank you — we will call you back ✺'; this.disabled=true;">
+      <form class="contact-form" id="rukiri-contact-form" onsubmit="handleRukiriSubmit(event)">
+        <input class="input" type="text" id="rk-name" placeholder="Your name" required />
+        <input class="input" type="tel" id="rk-phone" placeholder="Phone number" required />
+        <input class="input" type="text" id="rk-quantity" placeholder="How much honey? (size &amp; quantity)" />
+        <textarea class="input" id="rk-details" placeholder="Delivery location &amp; any other details"></textarea>
+        <button class="submit" type="submit" id="rk-submit-btn">
           Send order
           <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
             <path d="M1 5 L13 5 M9 1 L13 5 L9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-      </div>
+        <p id="rk-status" style="margin-top:.6rem;font-size:.85rem;"></p>
+      </form>
     </div>
 
     <div class="contact-info">
@@ -1949,6 +1950,48 @@ mobileMenu.querySelectorAll('a').forEach(a => {
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && hamburger.classList.contains('open')) setMenu(false);
 });
+
+// Contact form submit — sends order details to rukirihoney@gmail.com
+function handleRukiriSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('rk-submit-btn');
+  const status = document.getElementById('rk-status');
+
+  const name = document.getElementById('rk-name').value;
+  const phone = document.getElementById('rk-phone').value;
+  const quantity = document.getElementById('rk-quantity').value;
+  const details = document.getElementById('rk-details').value;
+
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerText = 'Sending...';
+  status.textContent = '';
+
+  fetch('https://formsubmit.co/ajax/rukirihoney@gmail.com', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      _subject: 'Rukiri Honey Order from ' + name,
+      Name: name,
+      Phone: phone,
+      Quantity: quantity,
+      Details: details
+    })
+  })
+  .then(res => res.json())
+  .then(() => {
+    btn.innerText = 'Thank you — we will call you back ✺';
+    status.style.color = '#4a7c3c';
+    status.textContent = "Your message was sent — we'll be in touch shortly.";
+    document.getElementById('rukiri-contact-form').reset();
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+    status.style.color = '#b03a2e';
+    status.textContent = 'Something went wrong. Please call or WhatsApp us directly.';
+  });
+}
 </script>
 
 </body>
