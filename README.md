@@ -15,8 +15,14 @@ Rukiri Pure Honey is single-origin, 100% natural honey harvested by hand from ap
 | File | Purpose |
 |------|---------|
 | `index.html` | Main single-page website (all images base64-embedded, no external dependencies except Google Fonts) |
+| `favicon.png` | Site logo, hosted as a real file so it can appear next to the site in Google Search results (Google requires a crawlable favicon file — an embedded/base64 icon isn't reliable for this) |
 | `.nojekyll` | Tells GitHub Pages to skip Jekyll processing |
 | `README.md` | This file |
+
+**Important:** `favicon.png` must be uploaded to the same folder as `index.html` (the repo root). If it's missing, browser tabs and Google Search will fall back to a generic icon.
+
+### About the favicon appearing in Google Search
+Even with everything set up correctly, Google can take **several days to a few weeks** to recrawl your page and start showing the favicon in search results — and Google states this isn't guaranteed even when all requirements are met. You can speed this up by submitting your homepage URL through Google Search Console's URL Inspection tool and requesting indexing.
 
 ---
 
